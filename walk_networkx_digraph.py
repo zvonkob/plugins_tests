@@ -42,7 +42,23 @@ def get_input(pth):
         except ValueError:
             continue
 
-    return files[i-1]
+    print("    1. width first")
+    print("    2. depth first")
+
+    while True:
+        try:
+            j = int(input("Izberi številko: "))
+            if j == 1:
+                sw_width = True
+                break
+            if j == 2:
+                sw_width = False
+                break
+            raise ValueError
+        except ValueError:
+            continue
+
+    return files[i-1], sw_width
 
 
 def draw_figure(G):
@@ -62,12 +78,15 @@ def draw_figure(G):
     plt.show()
 
 
-def walk_width(h):
+def walk_width(h, sw_width=True):
 
     rez = []
     todo = [ h.cTP ]
     while todo:
-        c = todo.pop(0)
+        if sw_width:
+            c = todo.pop(0)
+        else:
+            c = todo.pop()
         rez.append(c)
         for d in h.successors(c):
             todo.append(d)
@@ -77,7 +96,7 @@ def walk_width(h):
 
 def main():
 
-    file = get_input("inputs")
+    file, sw_width = get_input("inputs")
 
     h = RWjson.RWjson_to_nx(
             file.parent, 
@@ -92,7 +111,7 @@ def main():
             h.cTP = id
             break
 
-    wwidth = walk_width(h)
+    wwidth = walk_width(h, sw_width)
     
     for w in wwidth:
         print(w)
