@@ -51,12 +51,13 @@ def main():
         w = q["w"]
         m = q["m"]
         n = q["n"]
-        print(f"{vid} w={w}, m={m}, n={n}")
+        # print(f"{vid} w={w}, m={m}, n={n}")
+        # print(f"{vid} w={w}, {m} x {n}")
+        print(f"{vid} {m} x {n}")
 
     for vid1, vid2, qq in h.edges(data=True):
         q = h.nodes[vid2]
         qq["w"] = q["w"]
-
 
     draw_figure(h)
 
@@ -79,37 +80,37 @@ def get_input(pth):
     for i, file in enumerate(files, start=1):
         print(f"    {i}. {file.stem[:-3]}")
 
-    # while True:
-        # try:
-        #     i = int(input("Izberi številko: "))
-        #     if 1 <= i <= len(files):
-        #         break
-        #     raise ValueError
-        # except ValueError:
-        #     continue
+    while True:
+        try:
+            i = int(input("Izberi številko: "))
+            if 1 <= i <= len(files):
+                break
+            raise ValueError
+        except ValueError:
+            continue
 
-    i = 1
-    print(f"    i = {i}")
+    # i = 1
+    # print(f"    i = {i}")
 
     print("    1. width first")
     print("    2. depth first")
 
-    # while True:
-    #     try:
-    #         j = int(input("Izberi številko: "))
-    #         if j == 1:
-    #             sw_width = True
-    #             break
-    #         if j == 2:
-    #             sw_width = False
-    #             break
-    #         raise ValueError
-    #     except ValueError:
-    #         continue
+    while True:
+        try:
+            j = int(input("Izberi številko: "))
+            if j == 1:
+                sw_width = True
+                break
+            if j == 2:
+                sw_width = False
+                break
+            raise ValueError
+        except ValueError:
+            continue
 
-    j = 1
-    sw_width = True
-    print(f"    j = {j}, sw_width = {sw_width}")
+    # j = 1
+    # sw_width = True
+    # print(f"    j = {j}, sw_width = {sw_width}")
 
     return files[i-1], sw_width
 
