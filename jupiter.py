@@ -13,7 +13,7 @@ import networkx as nx
 import RWjson
 
 
-m_max, n_max = 2, 3
+m_max, n_max = 3, 5
 
 
 def main():
@@ -25,9 +25,12 @@ def main():
     pprint(h)
     draw_figure(h)
 
-    print(f"m_max = {m_max}\nn_max = {n_max}")
+    print(f"\nm_max = {m_max}\nn_max = {n_max}")
     g = do_max_width(h, n_max)
+    pprint(g)
     draw_figure(g)
+    pprint(h)
+    draw_figure(h)
 
 
 
@@ -39,8 +42,8 @@ def get_input(pth):
         if file.suffix != ".json": continue
         if not file.stem.endswith("_RW"): continue
         files.append(file)
-    # i, sw_width = get_input_input(files)
-    i, sw_width = 4, True
+    i, sw_width = get_input_input(files)
+    # i, sw_width = 4, True
     file = files[i-1]
     h = RWjson.RWjson_to_nx(file.parent, file.name[:-8])
     return h, sw_width
@@ -130,6 +133,7 @@ def do_max_width(h, n_max):
     qx = q.copy()
     g.add_node(cTP, **qx)
     TODO = [ cTP ]
+    deleted = []
     while TODO:
         c = TODO.pop()
         for i, d in enumerate(h.successors(c)):
@@ -140,8 +144,15 @@ def do_max_width(h, n_max):
             qx = q.copy()
             g.add_node(d, **q)
             qq = h.edges[c, d]
-            qqx = q.copy()
+            qqx = qq.copy()
             g.add_edge(c, d, **qqx)
+            deleted.append((c, d))
+    h.remove_edges_from(deleted)
+    deleted = []
+    for c in h.nodes():
+        if h.degree[c] == 0:
+            deleted.append(c)
+    h.remove_nodes_from(deleted)
     return g
    
 
