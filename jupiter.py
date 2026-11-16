@@ -13,7 +13,7 @@ import networkx as nx
 import RWjson
 
 
-m_max, n_max = 3, 5
+m_max, n_max = 2, 3
 
 
 def main():
@@ -42,8 +42,8 @@ def get_input(pth):
         if file.suffix != ".json": continue
         if not file.stem.endswith("_RW"): continue
         files.append(file)
-    i, sw_width = get_input_input(files)
-    # i, sw_width = 4, True
+    # i, sw_width = get_input_input(files)
+    i, sw_width = 4, True
     file = files[i-1]
     h = RWjson.RWjson_to_nx(file.parent, file.name[:-8])
     return h, sw_width
@@ -129,24 +129,22 @@ def pprint(h):
 def do_max_width(h, n_max):
     g = nx.DiGraph()
     cTP = h.cTP 
-    q = h.nodes[cTP]
-    qx = q.copy()
-    g.add_node(cTP, **qx)
     TODO = [ cTP ]
     deleted = []
     while TODO:
         c = TODO.pop()
+        q = h.nodes[c]
+        qx = q.copy()
+        g.add_node(c, **qx)
         for i, d in enumerate(h.successors(c)):
             if i >= n_max:
                 continue
             TODO.append(d)
-            q = h.nodes[d]
-            qx = q.copy()
-            g.add_node(d, **q)
             qq = h.edges[c, d]
             qqx = qq.copy()
             g.add_edge(c, d, **qqx)
             deleted.append((c, d))
+    m, n = m_times_n(g, cTP)
     h.remove_edges_from(deleted)
     deleted = []
     for c in h.nodes():
