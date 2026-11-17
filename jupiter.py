@@ -17,20 +17,45 @@ m_max, n_max = 2, 3
 
 
 def main():
+    
     h, sw_width = get_input("inputs")
+
     cTP(h)
+
     wwidth = walk_digraph(h, sw_width)
+
     wenumerate(h, wwidth)
+
     m, n = m_times_n(h, h.cTP)
+
     pprint(h)
     draw_figure(h)
 
     print(f"\nm_max = {m_max}\nn_max = {n_max}")
-    g = do_max_width(h, n_max)
-    pprint(g)
-    draw_figure(g)
-    pprint(h)
-    draw_figure(h)
+    
+    hh = []
+    
+    while True:
+    
+        g = limit_number_of_sons(h, n_max)
+
+        hh.append(g)
+        
+        h = subtract(h, g)
+        
+        if len(h) == 0:
+            break
+
+        cTP(h)
+
+        m, n = m_times_n(h, h.cTP)
+
+        
+    for h in hh:
+        pprint(h)
+        draw_figure(h)
+
+
 
 
 
@@ -77,7 +102,7 @@ def cTP(h):
     for id in h.nodes():
         if h.in_degree(id) == 0:
             h.cTP = id; break
-    print(f"cTP = {h.cTP}")
+    print(f"\ncTP = {h.cTP}")
 
 
 def walk_digraph(h, sw_width=True):
@@ -126,11 +151,11 @@ def pprint(h):
         print(f"{vid} w{w:03d} {m}x{n}")
 
 
-def do_max_width(h, n_max):
+def limit_number_of_sons(h, n_max):
     g = nx.DiGraph()
-    cTP = h.cTP 
+    cTP = h.cTP
+    g.cTP = cTP
     TODO = [ cTP ]
-    deleted = []
     while TODO:
         c = TODO.pop()
         q = h.nodes[c]
@@ -143,15 +168,44 @@ def do_max_width(h, n_max):
             qq = h.edges[c, d]
             qqx = qq.copy()
             g.add_edge(c, d, **qqx)
-            deleted.append((c, d))
     m, n = m_times_n(g, cTP)
-    h.remove_edges_from(deleted)
-    deleted = []
-    for c in h.nodes():
-        if h.degree[c] == 0:
-            deleted.append(c)
-    h.remove_nodes_from(deleted)
     return g
+
+
+# def do_max_width(h, n_max):
+    # g = nx.DiGraph()
+    # cTP = h.cTP 
+    # TODO = [ cTP ]
+    # deleted = []
+    # while TODO:
+        # c = TODO.pop()
+        # q = h.nodes[c]
+        # qx = q.copy()
+        # g.add_node(c, **qx)
+        # for i, d in enumerate(h.successors(c)):
+            # if i >= n_max:
+                # continue
+            # TODO.append(d)
+            # qq = h.edges[c, d]
+            # qqx = qq.copy()
+            # g.add_edge(c, d, **qqx)
+            # deleted.append((c, d))
+    # m, n = m_times_n(g, cTP)
+    # h.remove_edges_from(deleted)
+    # deleted = []
+    # for c in h.nodes():
+        # if h.degree[c] == 0:
+            # deleted.append(c)
+    # h.remove_nodes_from(deleted)
+    # return g
+
+
+def subtract(h, g):
+    # diff = copy.deepcopy(h)
+    diff = h.copy()
+    diff.remove_edges_from(g.edges())
+    diff.remove_nodes_from(list(nx.isolates(diff)))
+    return diff
    
 
 def draw_figure(G):
