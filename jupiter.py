@@ -28,8 +28,8 @@ def main():
 
     m, n = m_times_n(h, h.cTP)
 
-    pprint(h)
-    draw_figure(h)
+    # pprint(h)
+    # draw_figure(h)
 
     print(f"\nm_max = {m_max}\nn_max = {n_max}")
     
@@ -50,11 +50,19 @@ def main():
 
         m, n = m_times_n(h, h.cTP)
 
-        
+    wlist = []
     for h in hh:
-        pprint(h)
-        draw_figure(h)
+        # pprint(h)
+        wlist.append({
+                h["w"]: (h["m"], h["n"])
+        })
+        break
 
+    for row in wlist:
+        w, (m, n) = row
+        print(f"{w}: ({m}, {n})")
+
+    draw_figure(h)
 
 
 

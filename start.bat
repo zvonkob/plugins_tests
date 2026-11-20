@@ -1,0 +1,2 @@
+venv_tests\Scripts\activate
+dir
