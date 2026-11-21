@@ -30,6 +30,8 @@ def main():
 
     # pprint(h)
     # draw_figure(h)
+    
+    h00 = h.copy()
 
     print(f"\nm_max = {m_max}\nn_max = {n_max}")
     
@@ -50,19 +52,34 @@ def main():
 
         m, n = m_times_n(h, h.cTP)
 
+
+    wdict = {}
+    for h in hh:
+        for vid, q in h.nodes(data=True):
+            wdict[vid] = []
+
     wlist = []
     for h in hh:
-        # pprint(h)
-        wlist.append({
-                h["w"]: (h["m"], h["n"])
-        })
-        break
+        pprint(h)
+        
+        for vid, q in h.nodes(data=True):
+            wdict[vid].append((q["m"], q["n"]))
 
-    for row in wlist:
-        w, (m, n) = row
-        print(f"{w}: ({m}, {n})")
+        # draw_figure(h)
 
-    draw_figure(h)
+        # break
+
+    print()
+    for k, v in wdict.items():
+        print(k, v)
+
+    # print()
+    # for row in wdict:
+    #     print(row)
+        # w, (m, n) = row
+        # print(f"{w}: ({m}, {n})")
+
+    draw_figure(h00)
 
 
 
